@@ -1,10 +1,19 @@
+import { createSmoothTimer, stopSmoothTimer } from "../../utils/fx";
+import CVFSurface from "../CVFSurface";
+export const {
+  width: DEVICE_WIDTH,
+  height: DEVICE_HEIGHT,
+  screenShape,
+} = hmSetting.getDeviceInfo();
+const TIMER_CIRCLE = 16;
+var count = 300
 export default class CVFUniverse {
   constructor() {
     this.surfaceDict = {};
     this.surfaceLayer = [];
-    this.viewPos = {
-      x: -200,
-      y: -200,
+    this.viewPos = { 
+      x: 0,
+      y: 0, 
       z: 0,
     };
     this.VIEW_POINT_DISTANCE = 100;
@@ -18,26 +27,7 @@ export default class CVFUniverse {
     this.needDraw = true;
     this.needCalculateAll = true;
     this.needDrawAll = true;
-    // this.touchLayerWidget = hmUI.createWidget(hmUI.widget.TEXT, {
-    //     x: 0,
-    //     y: 0,
-    //     w: DEVICE_WIDTH,
-    //     h: DEVICE_HEIGHT,
-    //     text: ''
-    // })
-    // this.touchEvent = []
-    // this.touchListenerList = []
-    // this.layerOrder = [] // HmWearable的当前实际堆叠顺序 由底至顶 [CVFSurface, boolean] boolean代表是否有实际渲染出来
-    // this.touchLayerWidget.addEventListener(hmUI.event.CLICK_DOWN, info => this.touchEvent.push(info))
-    // this.touchLayerWidget.addEventListener(hmUI.event.MOVE, info => this.touchEvent.push(info))
-    // this.touchLayerWidget.addEventListener(hmUI.event.CLICK_UP, info => this.touchEvent.push(info))
   }
-  // eventProcess() {
-  //     let eventCount = this.touchEvent.length
-  //     for (let i = 0; i < eventCount; ++i) {
-
-  //     }
-  // }
   /**
    *
    * @param {CVFSurface} surface
@@ -49,7 +39,7 @@ export default class CVFUniverse {
       return false;
     }
     this.surfaceDict[key] = surface;
-    surface.parentUniverse = this;
+    surface.parent = this;
     surface.init();
     this.surfaceLayer.push(surface);
     this.needRender = true;
@@ -57,12 +47,8 @@ export default class CVFUniverse {
     this.needOrder = true;
     this.needDraw = true;
     // TODO DCTouchLayer ?
-
     return true;
   }
-  // dcTouchLayer() {
-  //     hmUI.deleteWidget()
-  // }
   getKeyFromSurface(surface) {
     for (let key in this.surfaceDict) {
       if (this.surfaceDict[key] == surface) {
@@ -129,13 +115,9 @@ export default class CVFUniverse {
   static loop(universe) {
     // TODO
     // HmEventProcess
-    // TODO test
-    universe.moveViewPos({
-      x: universe.viewPos.x + 1,
-      y: universe.viewPos.y + 1,
-    });
     // TrackAnimStep
     // TODO
+    if(--count<0){console.log("awa");count = 300}
     // Render
     if (universe.needRender) {
       for (let key in universe.surfaceDict) {
@@ -175,41 +157,22 @@ export default class CVFUniverse {
           ) {
             if (surface.setShowing(false)) {
               // Delete Surface Beyond View from Last Rendering List
-              let index = null;
-              universe.layerOrder.find((item, i) =>
-                item[0] == surface ? (index = i || true) : false
-              );
-              if (index != null) universe.layerOrder[index][1] = false;
+              // let index = null;
+              // universe.layerOrder.find((item, i) =>
+              //   item[0] == surface ? (index = i || true) : false
+              // );
+              // if (index != null) universe.layerOrder[index][1] = false;
             }
           } else {
             if (surface.setShowing(true)) {
-              let index = null;
-              universe.layerOrder.find((item, i) =>
-                item[0] == surface ? (index = i || true) : false
-              );
-              if (index != null) universe.layerOrder[index][1] = true;
+              // let index = null;
+              // universe.layerOrder.find((item, i) =>
+              //   item[0] == surface ? (index = i || true) : false
+              // );
+              // if (index != null) universe.layerOrder[index][1] = true;
             }
           }
         }
-        // // Calculate
-        // if (universe.needCaculateOrder) {
-        //     for (let key in universe.surfaceDict) {
-        //         if (universe.surfaceDict[key].showing) {
-
-        //         }
-        //     }
-        //     // ZMap 先暂时用Y轴顺序代替
-        //     renderList.sort((a, b) => b.center_pos.z - a.center_pos.z)
-        //     let dcList = []
-        //     // newLength >= oldLength
-        //     let oldLength = universe.renderList.length
-        //     let newLength = renderList.length
-        //     while (true) {
-        //         if (oldLength < 0) { break }
-
-        //     }
-        // }
-        // Draw
         surface.draw();
       }
       universe.needRender = false;

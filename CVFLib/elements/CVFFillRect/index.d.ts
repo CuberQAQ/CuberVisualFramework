@@ -1,17 +1,14 @@
 import { CVFElement } from "../../base/CVFElement";
 
-declare class CVFText extends CVFElement {
+declare class CVFFillRect extends CVFElement {
   public constructor(
     prop: {
       x: number;
       y: number;
       w: number;
       h: number;
-      text: string;
-      text_size: number;
+      radius: number;
       color: number;
-      align_h: HmWearableProgram.DeviceSide.HmUI.IHmUIAlign;
-      align_v: HmWearableProgram.DeviceSide.HmUI.IHmUIAlign;
     },
     
     visible: boolean
@@ -22,4 +19,4 @@ declare class CVFText extends CVFElement {
   public redraw(shapeRate: number, offset: {x: number, y: number}, lod: boolean, alpha: number): void
 }
 
-export default CVFText;
+export default CVFFillRect;

@@ -1,12 +1,9 @@
 import { gettext } from "i18n"
-import { CVFElement, CVFSurface, CVFUniverse } from "../../../CVFLib/index"
-import { CVFText } from "../../../CVFLib/elements/text"
-import { CVFFillRect } from "../../../CVFLib/elements/fillRect"
+import { CVFUniverse, CVFSurface, CVFText, CVFFillRect } from "../../../cvflib"
 const logger = DeviceRuntimeCore.HmLogger.getLogger('home')
 Page({
   build() {
     let universe = new CVFUniverse()
-    
     {
       let surface = new CVFSurface({ x: -50, y: -160, z: 180 }, { x1: -100, x2: 200, y1: -50, y2: 50 })
       let bgd = new CVFFillRect({
@@ -19,7 +16,7 @@ Page({
       })
       let text = new CVFText({
         x: -90,
-        y: -20,
+        y: -20, 
         w: 120,
         h: 50,
         text: "Hello!",
@@ -117,6 +114,7 @@ Page({
         align_v: hmUI.align.LEFT,
       }, true)
       universe.addSurface(surface, "card3")
+      
       surface.addElement(bgd, "bgd")
       surface.addElement(text, "text")
       surface.addElement(subtext, "subtext")

@@ -6,8 +6,7 @@ export default class CVFSurface {
    */
   constructor(pos, border) {
     this.elementDict = {};
-    this.blockAreaList = [];
-    this.parentUniverse = null;
+    this.parent = null;
     this.center_pos = {
       x: 0,
       y: 0,
@@ -39,26 +38,34 @@ export default class CVFSurface {
     };
     this.lod = false;
     this.visible = true;
-    this.needCalculate = true;
     this.shapeRate = 1;
     this.offset = { x: 0, y: 0 };
     // Condition Params
     this.showing = false;
     this.blockedChanged = false;
+    this.needCalculate = true;
     this.needDraw = false;
     this.needUnify = true; // Need To Redraw To Make Element Order Same
-    this.touchListen = false;
-  }
+  } 
   addElement(element, key) {
     if (this.elementDict[key]) {
       return false;
     }
     this.elementDict[key] = element;
     this.needUnify = true;
-    if (this.parentUniverse) {
-      this.parentUniverse.needDraw = true;
+    if (this.parent) {
+      this.parent.needDraw = true;
     }
     this.needDraw = true;
+    return true;
+  }
+  removeElement(key) {
+    let element = this.elementDict[key]
+    if (!element) {
+      return false;
+    }
+    element.clear()
+    this.elementDict[key] = undefined;
     return true;
   }
   init() {
@@ -82,22 +89,22 @@ export default class CVFSurface {
       this.elementDict[key].hide();
     }
   }
-  setShowing(bool) {
-    if (bool != this.showing) {
+  setShowing(showing) {
+    if (showing != this.showing) {
       // for (let key in this.elementDict) {
       //     this.elementDict[key].draw(null, null, null, true)
       // }
-      if (bool) {
+      if (showing) {
         this.needDraw = true;
       } else {
         this.hide();
       }
-      this.showing = bool;
+      this.showing = showing;
       return true;
     }
     return false;
   }
-  setLOD(lod) {
+  setLod(lod) {
     if (lod != this.lod) {
       this.needDraw = true;
       this.lod = lod;
@@ -130,6 +137,7 @@ export default class CVFSurface {
     pos.z && (this.center_pos.z = pos.z);
     this.needDraw = true;
     this.needCalculate = true;
+    return true
   }
   /**
    *
@@ -143,15 +151,8 @@ export default class CVFSurface {
     border.y2 && (this.border.x1 = border.y2);
     this.needDraw = true;
     this.needCalculate = true;
+    return true
   }
-  setBlockTested() {
-    // TODO
-  }
-  /**
-   *
-   * @param {number} shapeRate
-   * @param {{x: number, y: number}} offset <After> Multi ShapeRate
-   */
   draw() {
     if (this.needDraw) {
       for (let key in this.elementDict) {
@@ -162,12 +163,6 @@ export default class CVFSurface {
           this.shapeRate
         );
       }
-    }
-  }
-  delete() {
-    for (let key in this.elementDict) {
-      this.elementDict[key].delete(); // TODO
-      this.elementDict = {};
     }
   }
 }

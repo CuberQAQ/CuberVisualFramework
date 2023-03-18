@@ -1,7 +1,7 @@
-import { CVFElement } from "..";
-import { Fx } from "../fx";
+import CVFElement from "../../base/CVFElement";
+import { Fx } from "../../utils/fx";
 
-export class CVFText extends CVFElement {
+export default class CVFText extends CVFElement {
   /**
    *
    * @param {{x: number, y: number, w: number, h: number, text: string, text_size: number}} prop
@@ -13,7 +13,7 @@ export class CVFText extends CVFElement {
     this.prop = { ...prop };
     this.visible = visible ?? true;
   }
-  init() {
+  init() { 
     this.clear();
     this.widgets["text"] = hmUI.createWidget(hmUI.widget.TEXT, this.prop);
     this.widgets["text"].setProperty(hmUI.prop.VISIBLE, false);

@@ -1,7 +1,6 @@
-import { CVFElement } from "..";
-import { Fx } from "../fx";
-
-export class CVFFillRect extends CVFElement {
+import CVFElement from "../../base/CVFElement";
+import { Fx } from "../../utils/fx"
+export default class CVFFillRect extends CVFElement {
     /**
      * 
      * @param {{x: number, y: number, w: number, h: number, radius: number}} prop 
