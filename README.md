@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/CuberQAQ/CuberVisualFramework">
-    <img src="https://github.com/CuberQAQ/CuberVisualFramework/blob/master/logo.png" alt="Logo">
+    <img src="logo.png" alt="Logo">
   </a>
 
   <h3 align="center">CuberVisualFramework</h3>
