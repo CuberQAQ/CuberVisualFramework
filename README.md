@@ -14,7 +14,7 @@
 </div>
 
 <details>
-  <summary>Table of Contents</summary>
+  <summary>目录</summary>
   <ol>
     <li><a href="#什么是cvf">#什么是CVF</a></li>
     <li>
