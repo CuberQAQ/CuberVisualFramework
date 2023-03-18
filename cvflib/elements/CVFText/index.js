@@ -56,6 +56,7 @@ export default class CVFText extends CVFElement {
         w: this.prop.w * shapeRate,
         h: this.prop.h * shapeRate,
         text_size: this.prop.text_size * shapeRate,
+        text: this.prop.text,
         color: Fx.getMixColor(0x000000, this.prop.color, alpha),
       });
       return true;

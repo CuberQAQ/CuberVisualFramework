@@ -5,20 +5,20 @@ export const {
   height: DEVICE_HEIGHT,
   screenShape,
 } = hmSetting.getDeviceInfo();
-const TIMER_CIRCLE = 16;
-var count = 300
+const TIMER_CIRCLE = 16; 
+var count = 60;
 export default class CVFUniverse {
   constructor() {
     this.surfaceDict = {};
     this.surfaceLayer = [];
-    this.viewPos = { 
+    this.viewPos = {
       x: 0,
-      y: 0, 
-      z: 0,
+      y: 0,
+      z: -10,
     };
     this.VIEW_POINT_DISTANCE = 100;
     this.DEFAULT_LOD_Z = 100;
-    this.BEYOND_VIEW_Z = 200;
+    this.BEYOND_VIEW_Z = 160;
     this.timer = null;
     // Condition Property
     this.needRender = true;
@@ -79,7 +79,7 @@ export default class CVFUniverse {
     if (this.timer) {
       return false;
     }
-    this.timer = createSmoothTimer(1, TIMER_CIRCLE, CVFUniverse.loop, this);
+    this.timer = createSmoothTimer(10, TIMER_CIRCLE, CVFUniverse.loop, this);
     return true;
   }
   stop() {
@@ -104,7 +104,7 @@ export default class CVFUniverse {
     this.needCalculate = true;
     this.needCalculateAll = true;
     this.needOrder = true;
-    this.needDraw = true;
+    this.needDraw = true; 
     this.needDrawAll = true;
     return true;
   }
@@ -117,7 +117,13 @@ export default class CVFUniverse {
     // HmEventProcess
     // TrackAnimStep
     // TODO
-    if(--count<0){console.log("awa");count = 300}
+    if (--count <= 0) {
+      console.log(JSON.stringify(universe.viewPos));
+      count = 60;
+    }
+    universe.moveViewPos({
+      z: universe.viewPos.z - 1,
+    })
     // Render
     if (universe.needRender) {
       for (let key in universe.surfaceDict) {
@@ -128,15 +134,15 @@ export default class CVFUniverse {
           surface.needUnify = false;
         }
         // ForeCalculate
-        if (surface.needCalculate) {
+        if (universe.needCalculateAll || surface.needCalculate) {
           surface.shapeRate =
             universe.VIEW_POINT_DISTANCE /
             (surface.center_pos.z - universe.viewPos.z);
           surface.offset.x =
-            (universe.viewPos.x - surface.center_pos.x) * surface.shapeRate;
+            (surface.center_pos.x - universe.viewPos.x) * surface.shapeRate + DEVICE_WIDTH / 2;
           surface.offset.y =
-            (universe.viewPos.y - surface.center_pos.y) * surface.shapeRate;
-          surface._renBorder.x1 =
+            (surface.center_pos.y - universe.viewPos.y) * surface.shapeRate + DEVICE_HEIGHT / 2;
+          surface._renBorder.x1 = 
             surface.offset.x + surface.border.x1 * surface.shapeRate;
           surface._renBorder.y1 =
             surface.offset.y + surface.border.y1 * surface.shapeRate;
@@ -144,6 +150,7 @@ export default class CVFUniverse {
             surface.offset.x + surface.border.x2 * surface.shapeRate;
           surface._renBorder.y2 =
             surface.offset.y + surface.border.y2 * surface.shapeRate;
+          surface.needCalculate = false;
         }
         // BeyondView || Invisible ? Hide
         if (universe.needCalculateAll || surface.needCalculate) {
@@ -172,6 +179,7 @@ export default class CVFUniverse {
               // if (index != null) universe.layerOrder[index][1] = true;
             }
           }
+          surface.needCalculate = false;
         }
         surface.draw();
       }
@@ -179,4 +187,3 @@ export default class CVFUniverse {
     }
   }
 }
-

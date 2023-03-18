@@ -1,5 +1,5 @@
 import { gettext } from "i18n"
-import { CVFUniverse, CVFSurface, CVFText, CVFFillRect } from "../../../cvflib"
+import { CVFFillRect, CVFSurface, CVFText, CVFUniverse } from '../../../cvflib'
 const logger = DeviceRuntimeCore.HmLogger.getLogger('home')
 Page({
   build() {
@@ -31,7 +31,7 @@ Page({
         y: -45,
         w: 120,
         h: 35,
-        text: "CVFLib",
+        text: " CVFLib",
         text_size: 24,
         color: 0xaaaaaa,
         align_h: hmUI.align.CENTER_H,
@@ -69,7 +69,7 @@ Page({
         y: -45,
         w: 120,
         h: 35,
-        text: "CVFLib",
+        text: " CVFLib",
         text_size: 24,
         color: 0xaaaaaa,
         align_h: hmUI.align.CENTER_H,
@@ -107,7 +107,7 @@ Page({
         y: -45,
         w: 120,
         h: 35,
-        text: "CVFLib",
+        text: " CVFLib",
         text_size: 24,
         color: 0xaaaaaa,
         align_h: hmUI.align.CENTER_H,
@@ -146,7 +146,7 @@ Page({
         y: -45,
         w: 120,
         h: 35,
-        text: "CVFLib",
+        text: " CVFLib",
         text_size: 24,
         color: 0xaaaaaa,
         align_h: hmUI.align.CENTER_H,
@@ -185,7 +185,7 @@ Page({
         y: -45,
         w: 120,
         h: 35,
-        text: "CVFLib",
+        text: " CVFLib",
         text_size: 24,
         color: 0xaaaaaa,
         align_h: hmUI.align.CENTER_H,
@@ -206,9 +206,10 @@ Page({
       text_size: 28,
       color: 0xffffff,
       align_h: hmUI.align.CENTER_H,
+      align_v: hmUI.align.CENTER_V,
     })
-    universe.addSurface(title, "title")
     title.addElement(titleText, "text")
+    universe.addSurface(title, "title")
     universe.start()
   },
   onInit() {

@@ -1,7 +1,7 @@
 {
   "configVersion": "v2",
   "app": {
-    "appId": 1023366,
+    "appId": 1023367,
     "appName": "CVF Test",
     "appType": "app",
     "version": {
@@ -181,10 +181,10 @@
   },
   "i18n": {
     "en-US": {
-      "appName": "Example"
+      "appName": "CVF Demo"
     },
     "zh-CN": {
-      "appName": "示例程序"
+      "appName": "CVF Demo"
     }
   },
   "defaultLanguage": "en-US"
