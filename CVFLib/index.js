@@ -11,41 +11,43 @@ const TouchEventType = {
 export class CVFUniverse {
     constructor() {
         this.surfaceDict = {}
+        this.surfaceLayer = []
         this.viewPos = {
             x: -200,
             y: -200,
             z: 0,
         }
-        this.galaxyDict = {}
         this.VIEW_POINT_DISTANCE = 100
         this.DEFAULT_LOD_Z = 100
         this.BEYOND_VIEW_Z = 200
         this.timer = null
+        // Condition Property
+        this.needRender = true
+        this.needCalculate = true
+        this.needOrder = true
         this.needDraw = true
-        this.needCaculateOrder = true
-        this.needTestBlock = true
-        this.needDCTouchLayer = true
-        this.viewPosChanged = false
-        this.touchLayerWidget = hmUI.createWidget(hmUI.widget.TEXT, {
-            x: 0,
-            y: 0,
-            w: DEVICE_WIDTH,
-            h: DEVICE_HEIGHT,
-            text: ''
-        })
-        this.touchEvent = []
-        this.touchListenerList = []
-        this.layerOrder = [] // HmWearable的当前实际堆叠顺序 由底至顶 [CVFSurface, boolean] boolean代表是否有实际渲染出来
-        this.touchLayerWidget.addEventListener(hmUI.event.CLICK_DOWN, info => this.touchEvent.push(info))
-        this.touchLayerWidget.addEventListener(hmUI.event.MOVE, info => this.touchEvent.push(info))
-        this.touchLayerWidget.addEventListener(hmUI.event.CLICK_UP, info => this.touchEvent.push(info))
+        this.needCalculateAll = true
+        this.needDrawAll = true
+        // this.touchLayerWidget = hmUI.createWidget(hmUI.widget.TEXT, {
+        //     x: 0,
+        //     y: 0,
+        //     w: DEVICE_WIDTH,
+        //     h: DEVICE_HEIGHT,
+        //     text: ''
+        // })
+        // this.touchEvent = []
+        // this.touchListenerList = []
+        // this.layerOrder = [] // HmWearable的当前实际堆叠顺序 由底至顶 [CVFSurface, boolean] boolean代表是否有实际渲染出来
+        // this.touchLayerWidget.addEventListener(hmUI.event.CLICK_DOWN, info => this.touchEvent.push(info))
+        // this.touchLayerWidget.addEventListener(hmUI.event.MOVE, info => this.touchEvent.push(info))
+        // this.touchLayerWidget.addEventListener(hmUI.event.CLICK_UP, info => this.touchEvent.push(info))
     }
-    eventProcess() {
-        let eventCount = this.touchEvent.length
-        for (let i = 0; i < eventCount; ++i) {
+    // eventProcess() {
+    //     let eventCount = this.touchEvent.length
+    //     for (let i = 0; i < eventCount; ++i) {
 
-        }
-    }
+    //     }
+    // }
     /**
      * 
      * @param {CVFSurface} surface 
@@ -59,13 +61,18 @@ export class CVFUniverse {
         this.surfaceDict[key] = surface
         surface.parentUniverse = this
         surface.init()
-        this.layerOrder.push([surface, false])
+        this.surfaceLayer.push(surface)
+        this.needRender = true
+        this.needCalculate = true
+        this.needOrder = true
         this.needDraw = true
-        this.needCaculateOrder = true
-        this.needTestBlock = true
         // TODO DCTouchLayer ?
+        
         return true
     }
+    // dcTouchLayer() {
+    //     hmUI.deleteWidget()
+    // }
     getKeyFromSurface(surface) {
         for (let key in this.surfaceDict) {
             if (this.surfaceDict[key] == surface) {
@@ -75,8 +82,18 @@ export class CVFUniverse {
         return null
     }
     removeSurface(key) {
-        if (!this.surfaceDict[key]) { return false }
-        this.surfaceDict[key].delete()
+        let surface = this.surfaceDict[key]
+        if (!surface) { return false }
+
+        surface.clear()
+        surface.parentUniverse = null
+        let length = this.surfaceLayer.length
+        for(let i = 0; i < length; ++i) {
+            if(this.surfaceLayer[i] == surface) {
+                this.surfaceLayer.splice(i, 1)
+                break;
+            }
+        }
         this.surfaceDict[key] = undefined
         return true
     }
@@ -85,7 +102,7 @@ export class CVFUniverse {
             return false
         }
         this.timer = createSmoothTimer(1, TIMER_CIRCLE,
-            CVFUniverse.loop, { universe: this })
+            CVFUniverse.loop, this)
         return true
     }
     stop() {
@@ -94,30 +111,40 @@ export class CVFUniverse {
         this.timer = null
         return true
     }
+    /**
+     * 
+     * @param {{x?: number, y?: number, z?: number}} pos 
+     * @returns 
+     */
     moveViewPos(pos) {
         if (!pos) return false
         pos.x && (this.viewPos.x = pos.x)
         pos.y && (this.viewPos.y = pos.y)
         pos.z && (this.viewPos.z = pos.z)
+        this.needRender = true
+        this.needCalculate = true
+        this.needCalculateAll = true
+        this.needOrder = true
         this.needDraw = true
-        this.needCaculateOrder = true
-        this.needTestBlock = true
+        this.needDrawAll = true
         return true
     }
     /**
      * 
-     * @param {{universe: CVFUniverse}} param0 
+     * @param {CVFUniverse} universe 
      */
-    static loop({ universe }) {
+    static loop(universe) {
         // TODO
         // HmEventProcess
-        universe.viewPos.y++
-        universe.viewPos.x++
-        universe.needDraw = true
+        // TODO test
+        universe.moveViewPos({
+            x: universe.viewPos.x + 1,
+            y: universe.viewPos.y + 1,
+        })
         // TrackAnimStep
         // TODO
-        // Calculate & Draw
-        if (universe.needDraw) {
+        // Render
+        if (universe.needRender) {
             for (let key in universe.surfaceDict) {
                 var surface = universe.surfaceDict[key]
                 // Unify
@@ -136,7 +163,7 @@ export class CVFUniverse {
                     surface._renBorder.y2 = surface.offset.y + surface.border.y2 * surface.shapeRate
                 }
                 // BeyondView || Invisible ? Hide
-                if (universe.viewPosChanged || surface.needCalculate) {
+                if (universe.needCalculateAll || surface.needCalculate) {
                     if (!surface.visible
                         || surface.center_pos.z >= universe.BEYOND_VIEW_Z
                         || surface._renBorder.x1 > DEVICE_WIDTH / 2
@@ -180,7 +207,7 @@ export class CVFUniverse {
                 // Draw
                 surface.draw()
             }
-            universe.needDraw = false
+            universe.needRender = false
         }
     }
 }
