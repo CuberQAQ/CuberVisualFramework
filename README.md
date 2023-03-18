@@ -1,12 +1,5 @@
 <a name="readme-top"></a>
 
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
 <br />
 <div align="center">
   <a href="https://github.com/CuberQAQ/CuberVisualFramework">
@@ -17,32 +10,17 @@
 
   <p align="center">
     基于ZeppOS的强大UI框架
-    <a href="https://github.com/CuberQAQ/CuberVisualFramework/releases">Download</a>
-    ·
-    <a href="https://github.com/CuberQAQ/CuberVisualFramework/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/CuberQAQ/CuberVisualFramework/issues">Request Feature</a>
   </p>
 </div>
 
 <details>
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#什么是cvf">#什么是CVF</a></li>
     <li>
-      <a href="#about-the-project">About CVF</a>
+      <a href="#CVF的特点">CVF的特点</a>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#CVF社区">CVF社区</a></li>
   </ol>
 </details>
 
