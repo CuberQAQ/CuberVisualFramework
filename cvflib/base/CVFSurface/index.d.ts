@@ -1,7 +1,8 @@
 import CVFElement from "../CVFElement"
+import CVFUniverse from "../CVFUniverse"
 declare class CVFSurface {
   protected elementDict: {[key: string]: CVFElement}
-  protected parent: CVFElement | null
+  protected parent: CVFUniverse | null
   protected visible: boolean
   protected shapeRate: number
   protected offset: {x: number, y: number}
