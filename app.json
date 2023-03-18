@@ -1,0 +1,191 @@
+{
+  "configVersion": "v2",
+  "app": {
+    "appId": 1023366,
+    "appName": "CVF Test",
+    "appType": "app",
+    "version": {
+      "code": 1,
+      "name": "1.0.1"
+    },
+    "icon": "icon.png",
+    "vender": "CuberQAQ",
+    "description": "Example"
+  },
+  "permissions": [],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "1.0.0",
+      "target": "1.0.1",
+      "minVersion": "1.0.0"
+    }
+  },
+  "debug": false,
+  "targets": {
+    "480x480": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/480x480/home/index.page"
+          ],
+          "window": {
+            "navigationBarBackgroundColor": "#ffffff",
+            "navigationBarTextStyle": "black",
+            "navigationBarTitleText": "Hello World",
+            "backgroundColor": "#eeeeee",
+            "backgroundTextStyle": "light"
+          }
+        }
+      },
+      "platforms": [
+        {
+          "name": "gtr3-pro",
+          "deviceSource": 229
+        },
+        {
+          "name": "gtr3-pro-w",
+          "deviceSource": 230
+        },
+        {
+          "name": "gtr3-pro-l",
+          "deviceSource": 6095106
+        }
+        
+      ],
+      "designWidth": 480
+    },
+    "454x454": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/454x454/home/index.page"
+          ],
+          "window": {
+            "navigationBarBackgroundColor": "#ffffff",
+            "navigationBarTextStyle": "black",
+            "navigationBarTitleText": "Hello World",
+            "backgroundColor": "#eeeeee",
+            "backgroundTextStyle": "light"
+          }
+        }
+      },
+      "platforms": [
+        {
+          "name": "gtr3",
+          "deviceSource": 226
+        },
+        {
+          "name": "gtr3-w",
+          "deviceSource": 227
+        },
+        {
+          "name": "t-rex2",
+          "deviceSource": 418
+        },
+        {
+          "name": "t-rex2-w",
+          "deviceSource": 419
+        }
+      ],
+      "designWidth": 480
+    },
+    "390x450": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/390x450/home/index.page"
+          ],
+          "window": {
+            "navigationBarBackgroundColor": "#ffffff",
+            "navigationBarTextStyle": "black",
+            "navigationBarTitleText": "Hello World",
+            "backgroundColor": "#eeeeee",
+            "backgroundTextStyle": "light"
+          }
+        }
+      },
+      "platforms": [
+        {
+          "name": "gts3",
+          "deviceSource": 224
+        },
+        {
+          "name": "gts3-w",
+          "deviceSource": 225
+        },
+        {
+          "name": "gts4",
+          "deviceSource": 7995648
+        },
+        {
+          "name": "gts4-w",
+          "deviceSource": 7995649
+        }
+      ],
+      "designWidth": 480
+    },
+    "466x466": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/466x466/home/index.page"
+          ],
+          "window": {
+            "navigationBarBackgroundColor": "#ffffff",
+            "navigationBarTextStyle": "black",
+            "navigationBarTitleText": "Hello World",
+            "backgroundColor": "#eeeeee",
+            "backgroundTextStyle": "light"
+          }
+        }
+      },
+      "platforms": [
+        {
+          "name": "gtr4",
+          "deviceSource": 7930112
+        },
+        {
+          "name": "gtr4-w",
+          "deviceSource": 7930113
+        }
+      ],
+      "designWidth": 480
+    },
+    "416x416": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/416x416/home/index.page"
+          ],
+          "window": {
+            "navigationBarBackgroundColor": "#ffffff",
+            "navigationBarTextStyle": "black",
+            "navigationBarTitleText": "Hello World",
+            "backgroundColor": "#eeeeee",
+            "backgroundTextStyle": "light"
+          }
+        }
+      },
+      "platforms": [
+        {
+          "name": "falcon",
+          "deviceSource": 414
+        },
+        {
+          "name": "falcon-w",
+          "deviceSource": 415
+        }
+      ],
+      "designWidth": 480
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Example"
+    },
+    "zh-CN": {
+      "appName": "示例程序"
+    }
+  },
+  "defaultLanguage": "en-US"
+}
