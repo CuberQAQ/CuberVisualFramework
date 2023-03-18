@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/CuberQAQ/CuberVisualFramework">
-    <img src="logo.png" alt="Logo">
+    <img src="https://github.com/CuberQAQ/CuberVisualFramework/blob/master/logo.png" alt="Logo">
   </a>
 
   <h3 align="center">CuberVisualFramework</h3>
@@ -16,7 +16,7 @@
 <details>
   <summary>目录</summary>
   <ol>
-    <li><a href="#什么是cvf">#什么是CVF</a></li>
+    <li><a href="#什么是CVF">什么是CVF</a></li>
     <li>
       <a href="#CVF的特点">CVF的特点</a>
     </li>
