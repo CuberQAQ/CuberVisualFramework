@@ -33,7 +33,7 @@ export default class CVFFillRect extends CVFElement {
             radius: this.prop.radius * shapeRate,
             color: Fx.getMixColor(0x000000, this.prop.color, alpha)
         })
-        this.widgets["fillRect"].setProperty(hmUI.prop.VISIBLE, this.visible && !lod)
+        this.widgets["fillRect"].setProperty(hmUI.prop.VISIBLE, this.visible)
     }
     /**
      * 
@@ -44,7 +44,7 @@ export default class CVFFillRect extends CVFElement {
      * @returns 
      */
     draw(shapeRate, offset, lod, alpha) {
-        if (!this.visible || lod) {
+        if (!this.visible) {
             this.widgets["fillRect"].setProperty(hmUI.prop.VISIBLE, false)
             return false
         }

@@ -771,7 +771,7 @@ export class SmoothTimer {
             this._lastUtc_ += circle // 更新上一次执行的时间戳
           }
 
-          func(param) // 执行
+          func(param, this) // 执行
         }
         // // 检测是否到达指定时间
         // while(hmTime.utc - this._lastUtc_ >= circle + SMOOTH_TIMER_SAFE_TIME) { // 到达并执行
@@ -818,4 +818,11 @@ export function createSmoothTimer(delay, circle, func, option, mode) {
 export function stopSmoothTimer(instance) {
   if (instance._hmTimer_) { timer.stopTimer(instance._hmTimer_); return true }
   return false
+}
+
+export function setTimeout(func, timeout) {
+  createSmoothTimer(timeout, Number.MAX_SAFE_INTEGER, (func, _timer) => {
+    func()
+    stopSmoothTimer(_timer)
+  }, func)
 }

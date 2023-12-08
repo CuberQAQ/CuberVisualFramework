@@ -5,8 +5,7 @@ export const {
   height: DEVICE_HEIGHT,
   screenShape,
 } = hmSetting.getDeviceInfo();
-const TIMER_CIRCLE = 16; 
-var count = 60;
+const TIMER_CIRCLE = 16;
 export default class CVFUniverse {
   constructor() {
     this.surfaceDict = {};
@@ -14,11 +13,11 @@ export default class CVFUniverse {
     this.viewPos = {
       x: 0,
       y: 0,
-      z: -10,
+      z: 20,
     };
     this.VIEW_POINT_DISTANCE = 100;
-    this.DEFAULT_LOD_Z = 100;
-    this.BEYOND_VIEW_Z = 160;
+    this.DEFAULT_LOD_Z = 200;
+    this.BEYOND_VIEW_Z = 300;
     this.timer = null;
     // Condition Property
     this.needRender = true;
@@ -104,7 +103,7 @@ export default class CVFUniverse {
     this.needCalculate = true;
     this.needCalculateAll = true;
     this.needOrder = true;
-    this.needDraw = true; 
+    this.needDraw = true;
     this.needDrawAll = true;
     return true;
   }
@@ -117,20 +116,26 @@ export default class CVFUniverse {
     // HmEventProcess
     // TrackAnimStep
     // TODO
-    if (--count <= 0) {
-      console.log(JSON.stringify(universe.viewPos));
-      count = 60;
-    }
-    universe.moveViewPos({
-      z: universe.viewPos.z - 1,
-    })
+    // let sur = universe.surfaceDict["card3"];
+    // sur.setCenterPos({
+    //   z: sur.center_pos.z - 1,
+    // });
+    // let sur2 = universe.surfaceDict["card5"];
+    // sur2.setCenterPos({
+    //   z: sur2.center_pos.z + 1,
+    // })
+
     // Render
     if (universe.needRender) {
       for (let key in universe.surfaceDict) {
-        var surface = universe.surfaceDict[key];
+        let surface = universe.surfaceDict[key];
         // Unify
         if (surface.needUnify) {
           surface.redraw();
+          for (let i = 0; i < universe.surfaceLayer.length; i++) {
+            const surface = universe.surfaceLayer.splice(i, 1)[0];
+            universe.surfaceLayer.push(surface);
+          }
           surface.needUnify = false;
         }
         // ForeCalculate
@@ -139,10 +144,12 @@ export default class CVFUniverse {
             universe.VIEW_POINT_DISTANCE /
             (surface.center_pos.z - universe.viewPos.z);
           surface.offset.x =
-            (surface.center_pos.x - universe.viewPos.x) * surface.shapeRate + DEVICE_WIDTH / 2;
+            (surface.center_pos.x - universe.viewPos.x) * surface.shapeRate +
+            DEVICE_WIDTH / 2;
           surface.offset.y =
-            (surface.center_pos.y - universe.viewPos.y) * surface.shapeRate + DEVICE_HEIGHT / 2;
-          surface._renBorder.x1 = 
+            (surface.center_pos.y - universe.viewPos.y) * surface.shapeRate +
+            DEVICE_HEIGHT / 2;
+          surface._renBorder.x1 =
             surface.offset.x + surface.border.x1 * surface.shapeRate;
           surface._renBorder.y1 =
             surface.offset.y + surface.border.y1 * surface.shapeRate;
@@ -150,10 +157,8 @@ export default class CVFUniverse {
             surface.offset.x + surface.border.x2 * surface.shapeRate;
           surface._renBorder.y2 =
             surface.offset.y + surface.border.y2 * surface.shapeRate;
-          surface.needCalculate = false;
-        }
-        // BeyondView || Invisible ? Hide
-        if (universe.needCalculateAll || surface.needCalculate) {
+          surface.setLod(surface.center_pos.z >= universe.DEFAULT_LOD_Z)
+          // BeyondView || Invisible ? Hide
           if (
             !surface.visible ||
             surface.center_pos.z >= universe.BEYOND_VIEW_Z ||
@@ -181,9 +186,77 @@ export default class CVFUniverse {
           }
           surface.needCalculate = false;
         }
-        surface.draw();
+      }
+      if (universe.needOrder) {
+        let rawOrder = [];
+        for (let i = 0; i < universe.surfaceLayer.length; i++) {
+          const element = universe.surfaceLayer[i];
+          if (element.showing) rawOrder.push(element);
+        }
+        let rawOut = []
+        rawOrder.forEach(item => {
+          rawOut.push({key: universe.getKeyFromSurface(item), z: item.center_pos.z})
+        })
+        console.log(JSON.stringify({rawOut}))
+        let targetOrder = rawOrder.slice();
+        targetOrder.sort((a, b) => b.center_pos.z - a.center_pos.z);
+        let tarOut = []
+        targetOrder.forEach(item => {
+          tarOut.push({key: universe.getKeyFromSurface(item), z: item.center_pos.z})
+        })
+        console.log(JSON.stringify({tarOut}))
+        let dcOrder = [];
+        let showSurNumber = targetOrder.length;
+        let rIndex = 0,
+          tIndex = 0;
+
+        // Calculate DC Order
+        while (true) {
+          if (rIndex >= showSurNumber) {
+            dcOrder = targetOrder.slice(tIndex);
+            break;
+          }
+          if (rawOrder[rIndex] == targetOrder[rIndex]) ++tIndex;
+          ++rIndex;
+          continue;
+        }
+        let dcOut = []
+        dcOrder.forEach(item => {
+          dcOut.push({key: universe.getKeyFromSurface(item), z: item.center_pos.z})
+        })
+        console.log(JSON.stringify({dcOut}))
+
+        // DC & Update Universe.surfaceLayer
+        for (let i = 0; i < dcOrder.length; ++i) {
+          dcOrder[i].redraw();
+          let msg = ""
+          for (let j = 0; j < universe.surfaceLayer.length; j++) {
+            const element = universe.surfaceLayer[j];
+            msg += ("[" + j + "]a:"+universe.getKeyFromSurface(element)+" b:"+universe.getKeyFromSurface(dcOrder[i])+"")
+            if (element == dcOrder[i]) {
+              universe.surfaceLayer.push(universe.surfaceLayer.splice(j, 1)[0]);
+              
+              console.log("Successfully Find!:"+msg);
+            break
+            }
+            if(j == universe.surfaceLayer.length - 1) {console.log("Cannot find!"+msg);}
+          }
+        }
+      }
+      if (universe.needDraw) {
+        for (let key in universe.surfaceDict) {
+          let surface = universe.surfaceDict[key];
+          if (universe.needDrawAll || surface.needDraw) {
+            surface.draw();
+            surface.needDraw = false;
+          }
+        }
       }
       universe.needRender = false;
+      universe.needCalculate = false;
+      universe.needCalculateAll = false;
+      universe.needDraw = false;
+      universe.needDrawAll = false;
     }
   }
 }

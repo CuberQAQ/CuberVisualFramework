@@ -13,7 +13,7 @@ export default class CVFText extends CVFElement {
     this.prop = { ...prop };
     this.visible = visible ?? true;
   }
-  init() { 
+  init() {
     this.clear();
     this.widgets["text"] = hmUI.createWidget(hmUI.widget.TEXT, this.prop);
     this.widgets["text"].setProperty(hmUI.prop.VISIBLE, false);
@@ -31,6 +31,7 @@ export default class CVFText extends CVFElement {
       y: offset.y + this.prop.y * shapeRate,
       w: this.prop.w * shapeRate,
       h: this.prop.h * shapeRate,
+      text: this.prop.text,
       text_size: this.prop.text_size * shapeRate,
       color: Fx.getMixColor(0x000000, this.prop.color, alpha),
     });
@@ -57,7 +58,7 @@ export default class CVFText extends CVFElement {
         h: this.prop.h * shapeRate,
         text_size: this.prop.text_size * shapeRate,
         text: this.prop.text,
-        color: Fx.getMixColor(0x000000, this.prop.color, alpha),
+        color: Fx.getMixColor(0x000000, this.prop.color, alpha > 1 ? 1 : alpha),
       });
       return true;
     }

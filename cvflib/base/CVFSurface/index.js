@@ -85,6 +85,7 @@ export default class CVFSurface {
     this.elementDict = {};
   }
   hide() {
+    console.log("hide")
     for (let key in this.elementDict) {
       this.elementDict[key].hide();
     }
@@ -137,6 +138,10 @@ export default class CVFSurface {
     pos.z && (this.center_pos.z = pos.z);
     this.needDraw = true;
     this.needCalculate = true;
+    this.parent && (this.parent.needCalculate = true)
+    this.parent && (this.parent.needRender = true)
+    this.parent && (this.parent.needOrder = true)
+    this.parent && (this.parent.needDraw = true)
     return true
   }
   /**
